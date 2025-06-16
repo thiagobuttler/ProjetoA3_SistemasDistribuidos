@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciamento de Usuários</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+        h1 { color: #333; }
+        form, .usuarios, .json-view { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 8px #0001; }
+        label { display: block; margin-top: 10px; }
+        input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
+        button { margin-top: 15px; padding: 10px 20px; border: none; background: #007bff; color: #fff; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #007bff; color: #fff; }
+        .actions button { margin-right: 5px; background: #dc3545; }
+        .actions button.edit { background: #28a745; }
+        pre { background: #222; color: #0f0; padding: 15px; border-radius: 6px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Gerenciamento de Usuários</h1>
+    <form id="usuarioForm">
+        <input type="hidden" id="usuarioId">
+        <label>Nome: <input type="text" id="nome" required></label>
+        <label>Email: <input type="email" id="email" required></label>
+        <label>Senha: <input type="password" id="senha" required></label>
+        <button type="submit">Salvar</button>
+        <button type="button" id="cancelarEdicao" style="display:none;">Cancelar</button>
+    </form>
+    <div class="usuarios">
+        <h2>Usuários Cadastrados</h2>
+        <table id="usuariosTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="json-view">
+        <h2>Visualização do Banco de Dados (db.json)</h2>
+        <pre id="jsonBanco"></pre>
+    </div>
+    <script>
+        const apiUrl = 'http://localhost:3000/usuarios';
+        const dbUrl = 'http://localhost:3000/db';
+
+        function carregarBanco() {
+            fetch(dbUrl)
+                .then(res => res.json())
+                .then(db => {
+                    document.getElementById('jsonBanco').textContent = JSON.stringify(db, null, 2);
+                });
+        }
+
+        function carregarUsuarios() {
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(usuarios => {
+                    // Se vier objeto, transforma em array
+                    if (usuarios && typeof usuarios === 'object' && !Array.isArray(usuarios)) {
+                        usuarios = Object.values(usuarios);
+                    }
+                    const tbody = document.querySelector('#usuariosTable tbody');
+                    tbody.innerHTML = '';
+                    usuarios.forEach(u => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${u.id}</td>
+                                <td>${u.nome}</td>
+                                <td>${u.email}</td>
+                                <td class="actions">
+                                    <button class="edit" onclick="editarUsuario('${u.id}')">Editar</button>
+                                    <button onclick="deletarUsuario('${u.id}')">Excluir</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    carregarBanco();
+                });
+        }
+
+        document.getElementById('usuarioForm').onsubmit = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('usuarioId').value;
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+            const usuario = { nome, email, senha };
+
+            if (id) {
+                fetch(`${apiUrl}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(usuario)
+                }).then(() => {
+                    this.reset();
+                    document.getElementById('cancelarEdicao').style.display = 'none';
+                    carregarUsuarios();
+                });
+            } else {
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(usuario)
+                }).then(() => {
+                    this.reset();
+                    carregarUsuarios();
+                });
+            }
+        };
+
+        function editarUsuario(id) {
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(usuarios => {
+                    // Se vier objeto, transforma em array
+                    if (usuarios && typeof usuarios === 'object' && !Array.isArray(usuarios)) {
+                        usuarios = Object.values(usuarios);
+                    }
+                    const usuario = usuarios.find(u => u.id === id);
+                    document.getElementById('usuarioId').value = usuario.id;
+                    document.getElementById('nome').value = usuario.nome;
+                    document.getElementById('email').value = usuario.email;
+                    document.getElementById('senha').value = '';
+                    document.getElementById('cancelarEdicao').style.display = '';
+                });
+        }
+
+        function deletarUsuario(id) {
+            if (confirm('Tem certeza que deseja excluir este usuário?')) {
+                fetch(`${apiUrl}/${id}`, { method: 'DELETE' })
+                    .then(() => carregarUsuarios());
+            }
+        }
+
+        document.getElementById('cancelarEdicao').onclick = function() {
+            document.getElementById('usuarioForm').reset();
+            document.getElementById('usuarioId').value = '';
+            this.style.display = 'none';
+        };
+
+        carregarUsuarios();
+        window.editarUsuario = editarUsuario;
+        window.deletarUsuario = deletarUsuario;
+    </script>
+</body>
+</html>

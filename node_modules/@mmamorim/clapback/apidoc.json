@@ -1,0 +1,57 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "2.6.0",
+    "title": "Um título de API",
+    "description": "Um exemplo legal extra mega super de API Um exemplo legal extra mega super de API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/frutas": {
+      "get": {
+        "tags": [
+          "FRUTAS"
+        ],
+        "summary": "Retorna os usuários",
+        "description": "Returns all pets from the system that the user has access to",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "users response"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "OUTROS"
+        ],
+        "summary": "Retorna os usuários",
+        "description": "Uma descrição",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "users response"
+          }
+        }
+      },
+      "put": {
+        "summary": "Um resumo PUT",
+        "description": "Uma descrição PUT",
+        "responses": {
+          "200": {
+            "description": "users response"
+          }
+        }
+      }
+    }
+  }
+}
