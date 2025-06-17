@@ -16,6 +16,13 @@
         th { background: #007bff; color: #fff; }
         .actions button { margin-right: 5px; background: #dc3545; }
         .actions button.edit { background: #28a745; }
+        .actions button.tarefas { 
+            background: #ffc107; /* amarelo */
+            color: #333;
+        }
+        .actions button.tarefas:hover {
+            background: #e0a800;
+        }
         pre { background: #222; color: #0f0; padding: 15px; border-radius: 6px; overflow-x: auto; }
     </style>
 </head>
@@ -78,6 +85,7 @@
                                 <td class="actions">
                                     <button class="edit" onclick="editarUsuario('${u.id}')">Editar</button>
                                     <button onclick="deletarUsuario('${u.id}')">Excluir</button>
+                                    <button class="tarefas" onclick="abrirTarefas('${u.id}')">Tarefas</button>
                                 </td>
                             </tr>
                         `;
@@ -101,6 +109,7 @@
                     body: JSON.stringify(usuario)
                 }).then(() => {
                     this.reset();
+                    document.getElementById('usuarioId').value = '';
                     document.getElementById('cancelarEdicao').style.display = 'none';
                     carregarUsuarios();
                 });
@@ -109,9 +118,16 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(usuario)
-                }).then(() => {
-                    this.reset();
-                    carregarUsuarios();
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.msg === "Já existe um usuário com este email.") {
+                        alert(data.msg);
+                    } else {
+                        this.reset();
+                        document.getElementById('usuarioId').value = '';
+                        carregarUsuarios();
+                    }
                 });
             }
         };
@@ -146,9 +162,33 @@
             this.style.display = 'none';
         };
 
+        function abrirTarefas(id) {
+            fetch(`${apiUrl}/${id}`)
+                .then(res => res.json())
+                .then(usuario => {
+                    const senha = prompt('Digite a senha do usuário para acessar as tarefas:');
+                    if (!senha) return;
+                    fetch('http://localhost:3000/auth', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: usuario.email, senha })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.token) {
+                            // Redireciona passando o token na URL
+                            window.location.href = `tarefas.html?usuarioId=${id}&token=${encodeURIComponent(data.token)}`;
+                        } else {
+                            alert('Senha incorreta!');
+                        }
+                    });
+                });
+        }
+
         carregarUsuarios();
         window.editarUsuario = editarUsuario;
         window.deletarUsuario = deletarUsuario;
+        window.abrirTarefas = abrirTarefas;
     </script>
 </body>
 </html>

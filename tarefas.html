@@ -1,0 +1,100 @@
+<!-- tarefas.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarefas do Usuário</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f7f7f7; }
+        h1 { color: #333; }
+        form, .tarefas { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 8px #0001; }
+        label { display: block; margin-top: 10px; }
+        input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
+        button { margin-top: 15px; padding: 10px 20px; border: none; background: #007bff; color: #fff; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #007bff; color: #fff; }
+        .actions button { margin-right: 5px; background: #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>Minhas Tarefas</h1>
+    <form id="tarefaForm">
+        <label>Descrição: <input type="text" id="descricao" required></label>
+        <button type="submit">Adicionar Tarefa</button>
+    </form>
+    <div class="tarefas">
+        <h2>Lista de Tarefas</h2>
+        <table id="tarefasTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const usuarioId = urlParams.get('usuarioId');
+        const token = urlParams.get('token');
+        const apiUrl = 'http://localhost:3000/tasks';
+
+        function carregarTarefas() {
+            fetch(apiUrl, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then(res => res.json())
+            .then(tasks => {
+                const tbody = document.querySelector('#tarefasTable tbody');
+                tbody.innerHTML = '';
+                Object.values(tasks)
+                    .filter(t => t.usuarioId === usuarioId)
+                    .forEach(t => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${t.id}</td>
+                                <td>${t.descricao}</td>
+                                <td class="actions">
+                                    <button onclick="removerTarefa('${t.id}')">Remover</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+            });
+        }
+
+        document.getElementById('tarefaForm').onsubmit = function(e) {
+            e.preventDefault();
+            const descricao = document.getElementById('descricao').value;
+            const tarefa = { descricao, usuarioId };
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(tarefa)
+            }).then(() => {
+                this.reset();
+                carregarTarefas();
+            });
+        };
+
+        window.removerTarefa = function(id) {
+            if (confirm('Tem certeza que deseja remover esta tarefa?')) {
+                fetch(`${apiUrl}/${id}`, { 
+                    method: 'DELETE',
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                .then(() => carregarTarefas());
+            }
+        };
+
+        carregarTarefas();
+    </script>
+</body>
+</html>
