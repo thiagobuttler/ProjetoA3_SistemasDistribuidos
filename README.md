@@ -1,36 +1,42 @@
-# Projeto A3 de Sistemas Distribuídos e Mobile
+# Projeto A3 - Aplicação Baseada em Microsserviços
 
-Este repositório contém o projeto desenvolvido como parte da entrega final da disciplina **Sistemas Distribuídos e Mobile** do curso da **Universidade São Judas Tadeu**.
-
-## 📌 Tema
-
-O projeto consiste no desenvolvimento de uma **API em JavaScript** com operações CRUD conectada a um banco de dados **não relacional**. A API atende a um site de **reservas temporárias de imóveis**, no estilo AirBnB.
+Este repositório contém a entrega do Projeto A3 da disciplina **Sistemas Distribuídos e Mobile** do curso da **Universidade São Judas Tadeu**. O trabalho consiste no desenvolvimento de uma aplicação baseada em **microsserviço**, com foco em autenticação, operações CRUD e persistência de dados.
 
 ## 🎯 Objetivo
 
-O principal objetivo do projeto é demonstrar o uso de tecnologias web para construir uma **API funcional**, aplicando os conceitos estudados ao longo da unidade curricular. Essa API permite realizar operações **Create, Read, Update e Delete** sobre os dados dos imóveis.
+Desenvolver um **microserviço completo** utilizando JavaScript, que implemente pelo menos **dois CRUDs**, sendo **um obrigatoriamente de usuários**. A aplicação deve contemplar:
 
-## 📄 Resumo
+- **Autenticação de usuários**
+- **Persistência de dados** (com banco de dados relacional ou não relacional)
+- **Funcionalidades acessíveis via requisições HTTP**
 
-O sistema foi pensado para facilitar o processo de locação temporária de imóveis por usuários que buscam acomodações para lazer ou trabalho. A aplicação foi desenvolvida com:
+## 🛠️ Tecnologias Utilizadas
 
-- **Linguagem:** JavaScript
-- **Banco de dados:** Arquivo JSON como armazenamento
+- **Linguagem:** JavaScript (Node.js)
+- **Persistência:** Arquivo JSON (como base de dados não relacional)
+- **Ferramentas de teste:** Postman ou similares
 
-## 🧩 Palavras-chave
+## 📄 Funcionalidades
 
-- Imóvel
-- Locação
-- Temporário
-- API
+- Cadastro, listagem, atualização e remoção de **usuários**
+- Implementação de um segundo CRUD completo
+- Controle de autenticação para acesso a rotas protegidas
 
 ## ✅ Resultados Esperados
 
-Ao final do projeto, a expectativa é entregar uma API funcional que permita a simulação de requisições usando ferramentas como o **Postman**, validando as operações CRUD.
+A aplicação deve ser capaz de:
+
+- Responder a requisições HTTP para os dois conjuntos de dados
+- Validar e autenticar usuários de forma segura
+- Armazenar os dados de forma persistente
+
+## 🔐 Autenticação
+
+A API possui autenticação básica que permite proteger endpoints específicos, garantindo que apenas usuários autenticados possam acessar determinadas rotas da aplicação.
 
 ## 🧠 Conclusão
 
-A equipe comprovou a viabilidade de criar uma API eficaz e segura utilizando JavaScript, alcançando os objetivos propostos com sucesso.
+O projeto demonstrou na prática a aplicação de conceitos de **microsserviços**, **CRUD**, **autenticação** e **persistência de dados**. Foi possível construir uma API funcional, segura e bem estruturada, aplicando os conhecimentos adquiridos ao longo da unidade curricular.
 
 ## 🔗 Link do Projeto
 
