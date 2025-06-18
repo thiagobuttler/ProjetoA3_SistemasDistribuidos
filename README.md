@@ -13,13 +13,27 @@ Desenvolver um **microserviço completo** utilizando JavaScript, que implemente 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Linguagem:** JavaScript (Node.js)
+- **Frontend para testes:** HTML e CSS (interface simples para consumir a API)
 - **Persistência:** Arquivo JSON (como base de dados não relacional)
-- **Ferramentas para visualização:** HTML e CSS
 
 ## 📄 Funcionalidades
 
 - Cadastro, listagem, atualização e remoção de **usuários** e **tarefas**
 - Controle de autenticação para acesso a rotas protegidas
+
+## 🧪 Testes da API
+
+Para facilitar o uso e testes das funcionalidades da API (GET, POST, PUT, DELETE), foi desenvolvida uma **interface web utilizando HTML e CSS**. Por meio dessa página, é possível interagir diretamente com o backend sem a necessidade de ferramentas como Postman ou Insomnia.
+
+A interface permite:
+
+- Listar registros existentes
+- Cadastrar novos dados
+- Editar registros
+- Excluir dados
+
+A página foi implementada com JavaScript no frontend, fazendo requisições HTTP para os endpoints do microserviço.
+
 
 ## ✅ Resultados Esperados
 
