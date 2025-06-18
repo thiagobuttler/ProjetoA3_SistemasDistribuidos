@@ -15,13 +15,14 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background: #007bff; color: #fff; }
-        .actions button { margin-right: 5px; background: #dc3545; }
     </style>
 </head>
 <body>
+    <div id="usuarioInfo" style="position: absolute; top: 20px; right: 40px; font-weight: bold; color: #333;"></div>
     <h1>Minhas Tarefas</h1>
     <form id="tarefaForm">
         <label>Descrição: <input type="text" id="descricao" required></label>
+        <label>Data de Conclusão: <input type="date" id="dataConclusao" required></label>
         <button type="submit">Adicionar Tarefa</button>
     </form>
     <div class="tarefas">
@@ -29,9 +30,8 @@
         <table id="tarefasTable">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Descrição</th>
-                    <th>Ações</th>
+                    <th>Data de Conclusão</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -42,6 +42,15 @@
         const usuarioId = urlParams.get('usuarioId');
         const token = urlParams.get('token');
         const apiUrl = 'http://localhost:3000/tasks';
+
+        // Buscar nome do usuário e exibir no canto superior direito
+        fetch(`http://localhost:3000/usuarios/${usuarioId}`)
+            .then(res => res.json())
+            .then(usuario => {
+                if (usuario && usuario.nome) {
+                    document.getElementById('usuarioInfo').textContent = `Olá, ${usuario.nome}`;
+                }
+            });
 
         function carregarTarefas() {
             fetch(apiUrl, {
@@ -56,11 +65,8 @@
                     .forEach(t => {
                         tbody.innerHTML += `
                             <tr>
-                                <td>${t.id}</td>
                                 <td>${t.descricao}</td>
-                                <td class="actions">
-                                    <button onclick="removerTarefa('${t.id}')">Remover</button>
-                                </td>
+                                <td>${t.dataConclusao ? new Date(t.dataConclusao).toLocaleDateString() : ''}</td>
                             </tr>
                         `;
                     });
@@ -70,7 +76,8 @@
         document.getElementById('tarefaForm').onsubmit = function(e) {
             e.preventDefault();
             const descricao = document.getElementById('descricao').value;
-            const tarefa = { descricao, usuarioId };
+            const dataConclusao = document.getElementById('dataConclusao').value;
+            const tarefa = { descricao, dataConclusao, usuarioId };
             fetch(apiUrl, {
                 method: 'POST',
                 headers: { 
@@ -82,16 +89,6 @@
                 this.reset();
                 carregarTarefas();
             });
-        };
-
-        window.removerTarefa = function(id) {
-            if (confirm('Tem certeza que deseja remover esta tarefa?')) {
-                fetch(`${apiUrl}/${id}`, { 
-                    method: 'DELETE',
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                .then(() => carregarTarefas());
-            }
         };
 
         carregarTarefas();

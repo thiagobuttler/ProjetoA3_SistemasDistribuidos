@@ -52,5 +52,14 @@ export default function rotasUsuarios(server, db) {
         res.status(201).json({ msg: "Exclusão ok." })
     });
     
+    server.get('/usuarios/:id', (req, res) => {
+        let id = req.params.id;
+        let usuario = db.get("/usuarios/" + id);
+        if (!usuario) {
+            res.status(404).json({ msg: "Usuário não encontrado." });
+            return;
+        }
+        res.status(200).json(usuario);
+    });
 
 }
