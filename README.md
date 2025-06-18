@@ -1,6 +1,6 @@
 # Projeto A3 - Aplicação Baseada em Microsserviços
 
-Este repositório contém a entrega do Projeto A3 da disciplina **Sistemas Distribuídos e Mobile** do curso da **Universidade São Judas Tadeu**. O trabalho consiste no desenvolvimento de uma aplicação baseada em **microsserviço**, com foco em autenticação, operações CRUD e persistência de dados.
+Este repositório contém a entrega do Projeto A3 da disciplina **Sistemas Distribuídos e Mobile** do curso de **Análise e Desenvolvimento de Sistemas** da **Universidade São Judas Tadeu**. O trabalho consiste no desenvolvimento de uma aplicação baseada em **microsserviço**, com foco em autenticação, operações CRUD e persistência de dados.
 
 ## 🎯 Objetivo
 
@@ -14,12 +14,11 @@ Desenvolver um **microserviço completo** utilizando JavaScript, que implemente 
 
 - **Linguagem:** JavaScript (Node.js)
 - **Persistência:** Arquivo JSON (como base de dados não relacional)
-- **Ferramentas de teste:** Postman ou similares
+- **Ferramentas para visualização:** HTLM e CSS
 
 ## 📄 Funcionalidades
 
-- Cadastro, listagem, atualização e remoção de **usuários**
-- Implementação de um segundo CRUD completo
+- Cadastro, listagem, atualização e remoção de **usuários** e **tarefas**
 - Controle de autenticação para acesso a rotas protegidas
 
 ## ✅ Resultados Esperados
@@ -40,7 +39,7 @@ O projeto demonstrou na prática a aplicação de conceitos de **microsserviços
 
 ## 🔗 Link do Projeto
 
-[Repositório no GitHub](https://github.com/thiagobuttler/Stayio)
+[Repositório no GitHub](https://github.com/thiagobuttler/ProjetoA3_SistemasDistribuidos)
 
 ---
 
