@@ -1,6 +1,6 @@
 # Projeto A3 - Aplicação Baseada em Microsserviços
 
-Este repositório contém a entrega do Projeto A3 da disciplina **Sistemas Distribuídos e Mobile** do curso de **Análise e Desenvolvimento de Sistemas** da **Universidade São Judas Tadeu**. O trabalho consiste no desenvolvimento de uma aplicação baseada em **microsserviço**, com foco em autenticação, operações CRUD e persistência de dados.
+Este repositório contém a entrega do Projeto A3 da unidade curricular **Sistemas Distribuídos e Mobile** do curso de **Análise e Desenvolvimento de Sistemas** da **Universidade São Judas Tadeu**. O trabalho consiste no desenvolvimento de uma aplicação baseada em **microsserviço**, com foco em autenticação, operações CRUD e persistência de dados.
 
 ## 🎯 Objetivo
 
