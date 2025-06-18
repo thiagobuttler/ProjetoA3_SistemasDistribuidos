@@ -14,7 +14,7 @@ Desenvolver um **microserviço completo** utilizando JavaScript, que implemente 
 
 - **Linguagem:** JavaScript (Node.js)
 - **Persistência:** Arquivo JSON (como base de dados não relacional)
-- **Ferramentas para visualização:** HTLM e CSS
+- **Ferramentas para visualização:** HTML e CSS
 
 ## 📄 Funcionalidades
 
