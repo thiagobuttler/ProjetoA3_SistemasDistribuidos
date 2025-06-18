@@ -15,7 +15,6 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background: #007bff; color: #fff; }
-        .actions button { margin-right: 5px; background: #dc3545; }
     </style>
 </head>
 <body>
@@ -23,6 +22,7 @@
     <h1>Minhas Tarefas</h1>
     <form id="tarefaForm">
         <label>Descrição: <input type="text" id="descricao" required></label>
+        <label>Data de Conclusão: <input type="date" id="dataConclusao" required></label>
         <button type="submit">Adicionar Tarefa</button>
     </form>
     <div class="tarefas">
@@ -76,7 +76,8 @@
         document.getElementById('tarefaForm').onsubmit = function(e) {
             e.preventDefault();
             const descricao = document.getElementById('descricao').value;
-            const tarefa = { descricao, usuarioId };
+            const dataConclusao = document.getElementById('dataConclusao').value;
+            const tarefa = { descricao, dataConclusao, usuarioId };
             fetch(apiUrl, {
                 method: 'POST',
                 headers: { 
@@ -88,16 +89,6 @@
                 this.reset();
                 carregarTarefas();
             });
-        };
-
-        window.removerTarefa = function(id) {
-            if (confirm('Tem certeza que deseja remover esta tarefa?')) {
-                fetch(`${apiUrl}/${id}`, { 
-                    method: 'DELETE',
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                .then(() => carregarTarefas());
-            }
         };
 
         carregarTarefas();
