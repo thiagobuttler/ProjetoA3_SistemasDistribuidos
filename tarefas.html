@@ -37,6 +37,7 @@
             <tbody></tbody>
         </table>
     </div>
+    <button onclick="abrirTarefas('USER-ID-AQUI')">Tarefas</button>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const usuarioId = urlParams.get('usuarioId');
@@ -93,6 +94,29 @@
                 .then(() => carregarTarefas());
             }
         };
+
+        function abrirTarefas(id) {
+            fetch(`http://localhost:3000/usuarios/${id}`)
+                .then(res => res.json())
+                .then(usuario => {
+                    const senha = prompt('Digite a senha do usuário para acessar as tarefas:');
+                    if (!senha) return;
+                    fetch('http://localhost:3000/auth', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: usuario.email, senha })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.token) {
+                            // Senha correta, abre tarefas.html
+                            window.location.href = `tarefas.html?usuarioId=${id}&token=${encodeURIComponent(data.token)}`;
+                        } else {
+                            alert('Senha incorreta');
+                        }
+                    });
+                });
+        }
 
         carregarTarefas();
     </script>
