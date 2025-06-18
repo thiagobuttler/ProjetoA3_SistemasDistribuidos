@@ -19,6 +19,7 @@
     </style>
 </head>
 <body>
+    <div id="usuarioInfo" style="position: absolute; top: 20px; right: 40px; font-weight: bold; color: #333;"></div>
     <h1>Minhas Tarefas</h1>
     <form id="tarefaForm">
         <label>Descrição: <input type="text" id="descricao" required></label>
@@ -37,12 +38,20 @@
             <tbody></tbody>
         </table>
     </div>
-    <button onclick="abrirTarefas('USER-ID-AQUI')">Tarefas</button>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const usuarioId = urlParams.get('usuarioId');
         const token = urlParams.get('token');
         const apiUrl = 'http://localhost:3000/tasks';
+
+        // Buscar nome do usuário e exibir no canto superior direito
+        fetch(`http://localhost:3000/usuarios/${usuarioId}`)
+            .then(res => res.json())
+            .then(usuario => {
+                if (usuario && usuario.nome) {
+                    document.getElementById('usuarioInfo').textContent = `Olá, ${usuario.nome}`;
+                }
+            });
 
         function carregarTarefas() {
             fetch(apiUrl, {
@@ -94,29 +103,6 @@
                 .then(() => carregarTarefas());
             }
         };
-
-        function abrirTarefas(id) {
-            fetch(`http://localhost:3000/usuarios/${id}`)
-                .then(res => res.json())
-                .then(usuario => {
-                    const senha = prompt('Digite a senha do usuário para acessar as tarefas:');
-                    if (!senha) return;
-                    fetch('http://localhost:3000/auth', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: usuario.email, senha })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.token) {
-                            // Senha correta, abre tarefas.html
-                            window.location.href = `tarefas.html?usuarioId=${id}&token=${encodeURIComponent(data.token)}`;
-                        } else {
-                            alert('Senha incorreta');
-                        }
-                    });
-                });
-        }
 
         carregarTarefas();
     </script>
